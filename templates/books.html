@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>books</title>
+    <link rel="stylesheet" href="../static/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <!-- adding animate and font awesome and a  few js files to add animation to a page-->
+    <link rel="stylesheet" href="../static/bootstrap/css/font-awesome.css">
+    <link rel="stylesheet" href="../static/bootstrap/css/animate.css">
+     <link rel="stylesheet" href="../static/custom/custom.css">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md bg-light navbar-light sticky-top">
+        <h1 class="navbar-nav text-action" ><a href="" class="nav-link">Arieh eLibrary</a></h1>
+        <button class="navbar-toggler" data-target="#mynav" data-toggle="collapse"> <!-- hides the button on a big screen-->
+        <span CLASS="navbar-toggler-icon"> </span></button>
+        <div class=" collapse navbar-collapse" id="mynav">
+            <!-- hides the menu items when on a smaller screen-->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a href="/books" class="nav-link">books</a></li>
+             
+                <div class="dropdown">
+                    <button class="btn btn-action dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">My Account</button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                        <a class="dropdown-item" href="/login">sign in</a>
+                        <a class="dropdown-item" href="/logout">sign out</a>
+                    </div>
+                </div>
+            </ul>
+        </div>
+    </nav>
+    {% if session['userkey'] %}
+    <h5 class="text-right">
+        <b>welcome:{{ session['userkey'] }}</b>
+
+    </h5>
+
+    <section>
+        <div class="container">
+               <div>
+                      <strong>{{ msg }}</strong>
+                         </div>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <button type="button" class="btn btn-action btn-lg float-left" data-toggle="modal" data-target="#myModal">Add a book</button>
+                </div>
+                <div class="col-md-6 float-right">
+                  <!-- 
+        <form action="/search" method="post" class="text-right">
+          <div class="input-group mb-3">        
+            <input
+              type="text"
+              class="form-control"
+              name="title"
+              value=""
+              placeholder="Search book" required>
+            <div class="input-group-append">
+              <button class="btn btn-action" type="submit">
+                Search
+              </button>
+            </div>
+          </div>
+        </form>-->
+
+
+                </div>
+            </div>
+
+
+            
+                <div class="row">
+
+                    <div class="col-md-12 d-flex justify-content-center ">
+                      
+                        <form action="/books">
+
+
+
+
+                            <table border="0"  id="example" class="display ">
+                                <thead class="thead-dark">
+
+
+                                    <tr>
+                                        <th>Genre</th>
+                                        <th>Title</th>
+                                        <th>Author</th>
+                                        <th>Description</th>
+                                        <th>book</th>
+                                        <th>Download link</th>
+                                    </tr>
+                                </thead>
+
+                                {% for row in rows %}
+                                <tr>
+                                    <td>{{ row[5] }}</td>
+                                    <td>{{ row[1] }}</td>
+                                    <td>{{ row[2] }}</td>
+                                    <td>{{ row[3] }}</td>
+                                    <td>{{ row[4] }}</td>
+                                    <td><a href="../static/uploads/{{ row[4] }}" download="file">Download</a></td>
+
+
+                                </tr>
+                                {% endfor %}
+                            </table>
+                            <hr>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+    </section>
+    {% endif %}
+
+
+    <!--add book modal-->
+
+
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title text-center text-action">Share a Book</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form action="/addbooks" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <label>Genre:</label><br>
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio"name="genre" value="fiction" id="inlineRadio1">
+                              <label class="form-check-label" for="inlineRadio1">Fiction</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio"name="genre" value="history" id="inlineRadio1">
+                              <label class="form-check-label" for="inlineRadio1">History</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio"name="genre" value="" id="inlineRadio1">
+                              <label class="form-check-label" for="inlineRadio1">Short Story</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio"name="genre" value="selfhelp" id="inlineRadio1">
+                              <label class="form-check-label" for="inlineRadio1">Self-Help</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                              <input class="form-check-input" type="radio"value="programming" id="inlineRadio1">
+                              <label class="form-check-label" for="inlineRadio1">programmimg</label>
+                            </div>
+                            
+
+
+                        </div>
+
+                        <div class="form-group">
+                          <label>Book Title:</label>
+                          <input type="text" name="title" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Author:</label>
+                            <input type="text" name="author" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Description:</label>
+                            <textarea name="description" id="" class="form-control" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Add Book:</label>
+                            <input type="file" name="file" class="form-control" required>
+                        </div>
+                        <div class="d-flex justify-content-center">
+                            <input type="submit" class=" btn btn-action" value="Submit Book">
+                        </div>
+                    </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Javascript-->
+    <script SRC="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="../static/bootstrap/js/bootstrap.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+    $('#example').DataTable();
+} );
+    </script>
+</body>
+
+</html>
